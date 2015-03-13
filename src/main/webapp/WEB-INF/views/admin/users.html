@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+		lang="en">
+
+<head th:replace="layout :: head"/>
+
+<body>
+	<header th:replace="layout-admin :: header">
+	</header>
+	
+	<div class="content">
+			<table class="users">
+			<caption>Users:</caption>
+			<thead>
+				<tr>
+					<th>E-mail</th>
+					<th>Username</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="user, iterStat : ${users}" th:class="${iterStat.odd}? 'alt'">
+					<td th:text="${user.email}">EMAIL</td>
+					<td th:text="${user.username}">USERNAME</td>
+					<td><form th:action="@{'/admin/users/'+${user.userId}}" method="post"><input type="hidden" name="_method" value="delete"/><button type="button" class="remove" onclick="submit();">Remove</button></form></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<footer th:replace="layout :: footer">
+	</footer>
+</body>
+</html>

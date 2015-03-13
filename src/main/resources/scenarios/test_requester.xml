@@ -1,0 +1,32 @@
+<scenario id="1" peer="ciccio">
+    <description>TESTCASE_NAME</description>
+
+<configuration>
+	<!-- nsi_listen_port and reply_to_endpoint must be picked in accord. reply_to_endpoint point to 
+	fully qualified URL reachable from the SUT, whose port bit depends on nsi_listen_port -->
+	<option name="nsi_listen_port" value="9090"></option>
+	<option name="reply_to_endpoint" value="http://127.0.0.1:9090/nsicontest/ConnectionRequester"></option>
+	<!-- remote_endpoint points to the Provider port of the SUT -->
+	<option name="remote_endpoint" value="http://127.0.0.1:9091/nsicontest/ConnectionProvider"></option>
+	<!-- provider_nsa is the NSA name the SUT is expected to have -->
+	<option name="provider_nsa" value="test.provider"></option>
+	<!-- requester_nsa is the NSA name the NSI-RI instance will have during the test scenario execution -->
+	<option name="requester_nsa" value="test.requester"></option>
+</configuration>
+
+
+    <section id="sect1" interval="500">
+        <operation id="oper1" name="reserve" interval="2500" continueOnError="false" expected="reserveConfirmed">
+        </operation>
+        <operation id="oper2" name="reserveCommit" interval="2500" expected="reserveCommitConfirmed">
+        </operation>
+        <operation id="oper2" name="provision" interval="2500" expected="provisionConfirmed">
+        </operation>
+        <operation id="oper2" name="release" interval="2500" expected="releaseConfirmed">
+        </operation>
+        <operation id="oper2" name="terminate" interval="2500" expected="terminateConfirmed">
+        </operation>
+    </section>
+</scenario>
+
+

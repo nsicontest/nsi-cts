@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+		lang="en">
+
+<head th:replace="layout :: head"/>
+
+<body>
+	<header th:replace="layout :: header">
+	</header>
+	
+	<div class="content">
+		<h1>Project <span th:text="${project.name}">PROJECT</span></h1>
+			
+		<form action="#" th:action="@{'/projects/'+${project.key}+'/testcases/new'}" th:object="${newTestCaseForm}" method="post">
+		<table class="props">
+			<caption>New Test Case:</caption>
+			<tbody>
+				<tr>
+					<td><label>Select Template: <span class="error" th:if="${#fields.hasErrors('templateId')}">(invalid template)</span></label></td>
+					<td>
+						<select th:field="*{templateId}" th:errorclass="error">
+							<option th:each="template : ${templates}" th:value="${template.templateId}" th:text="${template.name}">TEMPLATE</option>
+						</select>
+					</td>					
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="submit" value="Create"/></td>
+				</tr>
+			</tbody>
+		</table>
+		</form>
+	</div>
+	
+	<footer th:replace="layout :: footer">
+	</footer>
+</body>				
+</html>
+	

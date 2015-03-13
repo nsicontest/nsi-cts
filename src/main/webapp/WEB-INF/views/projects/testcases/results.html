@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+		lang="en">
+
+<body>
+
+	<!-- ############################################################## -->
+	<!-- 							TESTCASE 								-->
+	<!-- ############################################################## -->
+
+	<div th:fragment="testcase">
+		<script type="text/javascript">
+			$(document).ready(function(){
+			    $('[data-href]').click(function(){
+			        window.location = $(this).data('href');
+			        return false;
+			    });
+			});		
+		</script>
+		<table class="results">
+			<caption>Tests</caption>
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Status</th>
+					<th>Result</th>
+					<th>Info</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="test : ${tests}" 
+					th:class="
+					(${test.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).PASSED} ? 'good' : 
+						(${test.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).PASSED_CONDITIONALLY} ? 'warn' :
+							(${test.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).FAILED} ? 'error'
+							)
+						)					
+					)"
+					th:attr="data-href=@{'/projects/'+${project.key}+'/testcases/' + ${testCase.testCaseId} + '/tests/' + ${test.testId}}">
+					<td th:text="${test.template.name}">TEST1</td>
+					<td th:text="${test.status}">STATUS</td>
+					<td th:text="${test.resultStatus}">RESULT</td>
+					<td></td>
+				</tr>
+				
+				<!--
+				<tr class="warn" th:attr="data-href=@{'/projects/'+${project.key}+'/testcases/test'}">
+					<td>Test 2</td>
+					<td>PASSED</td>
+					<td>Some warnings found.</td>
+				</tr>
+				<tr class="error" th:attr="data-href=@{'/projects/'+${project.key}+'/testcases/test'}">
+					<td>Test 3</td>
+					<td>ERROR</td>
+					<td>3 errors found.</td>
+				</tr>
+				<tr th:attr="data-href=@{'/projects/'+${project.key}+'/testcases/test'}">
+					<td>Test 4</td>
+					<td>IN PROGRESS</td>
+					<td><progress value="65" max="100"></progress></td>
+				</tr>				
+				<tr th:attr="data-href=@{'/projects/'+${project.key}+'/testcases/test'}">
+					<td>Test 5</td>
+					<td>SCHEDULED</td>
+					<td></td>
+				</tr>
+				-->
+			</tbody>
+		</table>
+		
+		<table class="results">
+			<caption>Overall:</caption>
+			<tbody>
+				<tr>
+					<td>Tests</td>
+					<td th:inline="text"><meter th:attr="max=${summary.total},value=${summary.done}" max="5" value="2"></meter>Success: [[${summary.success}]], Errors: [[${summary.failed}]], Warnings: [[${summary.warning}]]</td>
+				</tr>
+				<tr>
+					<td>Summary</td>
+					<td th:class="
+					(${testCase.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).PASSED} ? 'good' : 
+						(${testCase.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).PASSED_CONDITIONALLY} ? 'warn' :
+							(${testCase.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).FAILED} ? 'error'
+							)
+						)					
+					)" 
+					th:text="
+					(${testCase.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).PASSED} ? 'COMPLIANT' : 
+						(${testCase.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).PASSED_CONDITIONALLY} ? 'COMPLIANT with warnings' :
+							(${testCase.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).FAILED} ? 'NOT COMPLIANT' : 'N/A'
+							)
+						)					
+					)"
+					>N/A</td>
+				</tr>
+			</tbody>		
+		</table>
+	</div>
+
+	<!-- ############################################################## -->
+	<!-- 							TEST 								-->
+	<!-- ############################################################## -->
+	
+
+
+	<div th:fragment="test">
+		<script type="text/javascript">
+			$(document).ready(function(){
+			    $('[data-href]').click(function(){
+			        window.location = $(this).data('href');
+			        return false;
+			    });
+			});		
+		</script>
+		
+		<h3>Status: <span th:text="${test.status}">STATUS</span></h3>
+		
+		<table th:if="${testResults}" class="testcase">
+			<caption>Test results:</caption>
+			<thead>
+				<tr>
+					<th>Operation</th>
+					<th>NSI-RI Agent action</th>
+					<th>User NSI expected action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="operation, iterStat : ${testResults.section.operations}" th:class="${iterStat.odd} ? 'alt'">
+					<td class="time">#<span th:text="${iterStat.count}">NO</span></td>
+					<td th:text="${operation.name}" th:class="${operation.result} ? 'good'">operation</td>
+					<td th:text="${operation.expected}" th:class="${operation.result} ? (${operation.result.success} ? 'good' : 'error')">expected</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		
+		<div th:unless="${testResults}">
+			<p class="center">Test results are not ready.</p>
+		</div>
+
+		<div th:if="${test.errorMessage}">
+			<h2>Error:</h2>
+			<p class="center" th:text="${test.errorMessage}">ERROR</p>		
+		</div>
+
+		<table class="results">
+			<caption>Overall:</caption>
+			<tbody>
+<!-- 				<tr> -->
+<!-- 					<td>Tests</td> -->
+<!-- 					<td><meter th:attr="max=${summary.total}" th:attr="value=${summary.done}" max="5" value="3"></meter>Success: [[${summary.success}]], Errors: [[${summary.failed}]], Warnings: [[${summary.warning}]]</td> -->
+<!-- 				</tr> -->
+				<tr th:switch="${test.resultStatus}">
+					<td>Summary</td>
+					<td th:case="${T(net.geant.nsi.contest.platform.data.ResultStatus).PASSED}" class="good">PASSED</td>
+					<td th:case="${T(net.geant.nsi.contest.platform.data.ResultStatus).PASSED_CONDITIONALLY}" class="warn">PASSED CONDITIONALLY</td>
+					<td th:case="${T(net.geant.nsi.contest.platform.data.ResultStatus).FAILED}" class="error">FAILED</td>
+					<td th:case="*">N/A</td>
+				</tr>
+			</tbody>		
+		</table>
+	</div>
+
+</body>
+</html>

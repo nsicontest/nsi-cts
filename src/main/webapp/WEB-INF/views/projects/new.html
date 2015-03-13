@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+		lang="en">
+
+<head th:replace="layout :: head"/>
+
+<body>
+	<header th:replace="layout :: header">
+	</header>
+	
+	<div class="content">
+		<h1>Project:</h1>
+			
+		<form action="#" th:action="@{/projects/new}" th:object="${newProjectForm}" method="post">
+		<table class="props">
+			<caption>Create a new project:</caption>
+			<tbody>
+				<tr>
+					<td><label>Name: <span class="error" th:if="${#fields.hasErrors('name')}">(invalid name)</span></label></td>
+					<td><input type="text" th:field="*{name}" value="NAME" required="required" th:errorclass="error"/></td>					
+				</tr>
+<!-- 
+				<tr>
+					<td><label>NSA ID: <span class="error" th:if="${#fields.hasErrors('networkId')}"> (incorrect)</span></label></td>
+					<td><input type="text" th:field="*{networkId}" value="NETWORK_ID" required="required" th:errorclass="error"/></td>					
+				</tr>
+ 
+				<tr>
+					<td><label>URL: <span class="error" th:if="${#fields.hasErrors('url')}">(invalid format)</span></label></td>
+					<td><input type="text" th:field="*{url}" value="URL" th:errorclass="error"/></td>											
+				</tr>
+-->
+								
+				<tr>
+					<td></td>
+					<td><input type="submit" value="Create"/></td>
+				</tr>
+			</tbody>
+		</table>
+		</form>
+	</div>
+	
+	<footer th:replace="layout :: footer">
+	</footer>
+</body>				
+</html>

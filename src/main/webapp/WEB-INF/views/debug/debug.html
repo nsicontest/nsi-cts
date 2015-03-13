@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		
+	<title>Debug</title>
+</head>
+<body>
+	<p><strong>User:</strong></p>
+	<p>Email: <span th:text="${user.email}"/></p>
+	<p>Username: <span th:text="${user.username}"/></p>
+	<p>Name: <span th:text="${user.name}"/></p>
+	<p>UserDetails: <span th:text="${userData}"/></p>
+	<br/>
+	<p>Is anonymous: <span sec:authorize="isAnonymous()">yes</span></p>
+	<p>Is authenticated: <span sec:authorize="isAuthenticated()">yes</span></p>
+
+</body>
+</html>

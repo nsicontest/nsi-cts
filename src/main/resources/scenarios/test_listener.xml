@@ -1,0 +1,58 @@
+<scenario id="1" peer="ciccio">
+    <description>TESTCASE_NAME</description>
+
+    <configuration>
+        <!-- nsi_listen_port and reply_to_endpoint must be picked in accord. reply_to_endpoint point to 
+             fully qualified URL reachable from the SUT, whose port bit depends on nsi_listen_port -->
+        <option name="nsi_listen_port" value="9090"></option>
+        <option name="reply_to_endpoint" value="http://127.0.0.1:9090/nsicontest/ConnectionRequester"></option>
+        
+        <!-- remote_endpoint points to the Provider port of the SUT -->
+        <option name="remote_endpoint" value="http://127.0.0.1:9091/nsicontest/ConnectionProvider"></option>
+        
+        <!-- provider_nsa is the NSA name the SUT is expected to have -->
+        <option name="provider_nsa" value="test.provider"></option>
+        
+        <!-- requester_nsa is the NSA name the NSI-RI instance will have during the test scenario execution -->
+        <option name="requester_nsa" value="test.requester"></option>
+    </configuration>
+
+
+    <section id="sect1" interval="500">
+        <operation id="oper1" name="listen" expected="reserve" >
+            
+            <!-- expectedRequestedNSA will match the NSAname of the requester -->
+            <!-- failOperation will make the expected operation fail forcibly. It is only supported by "reserve" and "reserveCommit" -->
+            <!--
+            expectedRequestedNSA="sut.requester.nsi.1"
+            <match name="startTime">2014-06-21 15:50:10.000 GMT</match>
+            <match name="startTimeMin">2014-06-21 15:50:10.000 GMT</match>
+            <match name="startTimeMax">2014-06-21 15:50:10.000 GMT</match>
+            <match name="endTime">2014-06-21 15:55:10.000 GMT</match>
+            <match name="endTimeMix">2014-06-21 15:55:10.000 GMT</match>
+            <match name="endTimeMax">2014-06-21 15:55:10.000 GMT</match>
+            <match name="version">0</match>
+            <match name="versionMin">0</match>
+            <match name="versionMax">0</match>
+            <match name="bidirectional">true</match>
+            <match name="symmetricPath">true</match>
+            <match name="capacity">9600</match>
+            <match name="capacityMin">9600</match>
+            <match name="capacityMax">9600</match>
+            <match name="requestedDestStp">urn:ogf:network:test.provider:2013:topology:egress?vlan=1000-2000</match>
+            <match name="requestedSourceStp">urn:ogf:network:test.provider:2013:topology:ingress?vlan=1000-2000</match>
+            <match name="serviceType">http://services.ogf.org/nsi/2013/07/descriptions/EVTS.A-GOLE</match>
+            -->
+        </operation>
+        <operation id="oper1" name="listen" expected="reserveCommit">
+        </operation>
+        <operation id="oper1" name="listen" expected="provision">
+        </operation>
+        <operation id="oper1" name="listen" expected="release">
+        </operation>
+        <operation id="oper1" name="listen" expected="terminate">
+        </operation>
+    </section>
+</scenario>
+
+

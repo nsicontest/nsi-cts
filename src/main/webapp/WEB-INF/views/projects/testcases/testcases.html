@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+		lang="en">
+
+<head th:replace="layout :: head"/>
+
+<body>
+	<header th:replace="layout :: header">
+	</header>
+			
+		
+	<div class="content">
+		<h1>Project <span th:text="${project.name}">PROJECT</span> - Test Cases</h1>
+		
+		<table class="testcases">
+			<caption>Test Cases:</caption>
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Info</th>
+					<th>Status</th>
+					<th>Results</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="testcase, iterStat : ${testcases}" th:class="${iterStat.odd}? 'alt'" th:attr="data-href=@{'/projects/'+${project.key}+'/testcases/'+${testcase.testCaseId}}">
+					<td th:text="${testcase.createdAt}">TIME</td>
+					<td th:if="${testcase.certification}" th:text="'Certification for '+${testcase.certification}">CERTIFICATION</td>
+					<td th:unless="${testcase.certification}" th:text="'Tests run: '+${testcase.testsCount}">TESTS_COUNT</td>
+					<td th:text="${testcase.status}">STATUS</td>
+					<td th:if="${testcase.certification}" th:class="
+						(${testcase.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).PASSED} ? 'good' : 
+							(${testcase.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).PASSED_CONDITIONALLY} ? 'warn' :
+								(${testcase.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).FAILED} ? 'error'
+								)
+							)					
+						)" 
+						th:text="
+						(${testcase.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).PASSED} ? 'COMPLIANT' : 
+							(${testcase.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).PASSED_CONDITIONALLY} ? 'COMPLIANT with warnings' :
+								(${testcase.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).FAILED} ? 'NOT COMPLIANT' : 'N/A'
+								)
+							)					
+						)"
+					>N/A</td>
+					<td th:unless="${testcase.certification}" th:text="${testcase.resultStatus}">RESULTS</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<footer th:replace="layout :: footer">
+	</footer>
+</body>				
+</html>
+	

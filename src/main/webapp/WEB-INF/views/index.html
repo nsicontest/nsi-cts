@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+		lang="en">
+
+<head th:replace="layout :: head"/>
+
+<body>
+	<header th:replace="layout :: header">
+	</header>
+	
+	<div class="content">
+		<table class="twoColumns">
+			<tbody>
+				<tr>
+					<td>
+						<h1>Welcome!</h1>
+						<p><strong>NSI CONTEST</strong> is the generic framework for testing NSI Agents for compliance with the protocol v2.0.</p>
+						<ul>
+							<li>allows to automate system tests</li>
+							<li>simplifies testing in a distributed environment</li>
+							<li>validate against number of test cases</li>
+							<li>connect and play</li>	
+						</ul>
+					</td>
+					<td>
+						<div class="registration">
+							<form action="#" method="post" th:action="@{/register}" th:object="${registrationForm}">
+								<fieldset>
+								<legend>Registration:</legend>
+								<p th:if="${#fields.hasErrors('*')}"><label class="error">There are some errors.</label></p>
+								<p><label class="title">E-mail: <span class="error" th:if="${#fields.hasErrors('email')}">(incorrect)</span></label> <input type="email" placeholder="user@example.com" required="required" th:field="*{email}" th:errorclass="error"/></p>
+								<p><label class="title">Username:</label> <input type="text" placeholder="your username" th:field="*{username}" th:errorclass="error"/></p>
+								<p><label class="title">Password: <span class="error" th:if="${#fields.hasErrors('password')}">(must have at least 6 characters)</span></label> <input type="password" placeholder="password" required="required" th:field="*{password}" th:errorclass="error"/></p>
+								<p><label class="title">Confirm: <span class="error" th:if="${#fields.hasErrors('global')}"> (must be the same as password)</span></label> <input type="password" placeholder="confirm password" required="required" th:field="*{passwordConfirm}" th:errorclass="error"/></p>
+								<p><input type="radio" name="choice" value="NONE" th:field="*{action}" checked="checked" required="required" th:errorclass="error"/><label>do not specify project</label></p>
+								<p><input type="radio" name="choice" value="CREATE" th:field="*{action}" required="required" th:errorclass="error"/><label>create a new project</label></p>
+								<p><input type="radio" name="choice" value="JOIN" th:field="*{action}" required="required" th:errorclass="error"/><label>join to existing project</label></p>
+								<p><label class="title">Project: <span class="error" th:if="${#fields.hasErrors('project')}"> (invalid name or id)</span></label> <input type="text" placeholder="new project name or existing project id" th:field="*{project}" th:errorclass="error"/></p>
+								<p><input type="checkbox" name="terms" required="required" th:field="*{termsAgreed}" th:errorclass="error"/><label>I agree to the terms and conditions provided in <a class="important" th:href="@{/terms}">this license</a>. <span class="error" th:if="${#fields.hasErrors('termsAgreed')}">It has to be accepted.</span></label></p>
+								<p><input type="submit" value="Register"/></p>
+								</fieldset>
+							</form>
+						</div>					
+					</td>
+				</tr>
+			</tbody>
+		</table>		
+		
+	</div>
+	
+	<footer th:replace="layout :: footer">
+	</footer>
+</body>				
+</html>

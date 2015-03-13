@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+		lang="en">
+
+<head th:replace="layout :: head"/>
+
+<body>
+	<header>
+		<nav>
+			<div th:replace="layout :: logo">LOGO</div>
+		</nav>
+	</header>
+	
+	<div class="content">
+		<div class="errorPage">
+			<div class="title">Oups... Something went wrong. :(</div>
+			<div class="message">In order to help us solving your problem please provide us the following code: <strong><span th:text="${code}">CODE</span></strong></div>
+		</div>
+	</div>
+	
+	<footer th:replace="layout :: footer">
+	</footer>
+</body>				
+</html>

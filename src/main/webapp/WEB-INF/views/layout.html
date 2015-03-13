@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+		lang="en">
+<head th:fragment="head">
+	<meta charset="UTF-8"/>
+	<meta name="author" content="Michal Giertych (mikus@man.poznan.pl)"/>
+	<link rel="stylesheet" href="../../resources/styles/style.css" th:href="@{/resources/styles/style.css}"/>
+	<script src="../../resources/scripts/jquery-2.1.1.min.js" th:src="@{/resources/scripts/jquery-2.1.1.min.js}"></script>
+	<script src="../../resources/scripts/cts.js" th:src="@{/resources/scripts/cts.js}"></script>
+	<title>GEANT CTS Platform</title>
+</head>
+<body>
+	<header th:fragment="header">
+		<nav>
+			<div th:fragment="logo" class="logo">
+				<img src="../../resources/images/nsi-contest-logo.png" th:src="@{/resources/images/nsi-contest-logo.png}"/>
+			</div>
+			<ul sec:authorize="isAnonymous()">
+				<li><a href="#" th:href="@{/}">Home</a></li>
+				<li><a href="#" th:href="@{/docs}">Docs</a></li>
+			</ul>
+			<ul sec:authorize="isAuthenticated()">
+				<li sec:authorize="hasRole('ROLE_USER')"><a href="#" th:href="@{/projects}">My Projects</a>
+					<ul>
+						<li><a href="#" th:href="@{/projects/new}">Create a new project</a></li>
+						<li><a href="#" th:href="@{/projects/join}">Join project</a></li>
+						<li th:each="project : ${userProjects}"><a href="#" th:href="@{'/projects/'+${project.key}}" th:text="${project.name}">PROJECT</a>
+							<ul>
+								<li><a href="#" th:href="@{'/projects/'+${project.key}+'/testcases'}">Test Cases</a></li>
+								<li><a href="#" th:href="@{'/projects/'+${project.key}+'/configuration'}">Configuration</a></li>
+								<li><a href="#" th:href="@{'/projects/'+${project.key}+'/users'}">Users</a></li>
+							</ul>						
+						</li>
+						<!-- 
+						<li><a href="#">test1</a>
+							<ul>
+								<li><a href="#">results</a></li>
+							</ul>
+						</li>
+						<li><a href="#">test2</a></li>
+						<li><a href="#">test3</a></li>
+						-->
+					</ul>
+				</li>
+				<li><a href="#" th:href="@{/templates}">Templates</a>
+					<ul sec:authorize="hasRole('ROLE_ADMIN')">
+						<li><a href="#" th:href="@{/templates/new}">Create a new template</a></li>
+					</ul>
+				</li>
+				<li sec:authorize="hasRole('ROLE_ADMIN')"><a href="#" th:href="@{/admin}">Admin</a></li>
+				<li><a href="#" th:href="@{/docs}">Docs</a></li>
+			</ul>
+			
+			<div class="login" sec:authorize="isAnonymous()">
+				<form action="#" th:action="@{/login}" method="post" th:object="${loginForm}">
+					<label>E-mail: </label><input type="email" placeholder="user@example.com" th:field="*{email}" th:errorclass="error" required="required"/> <label>Password: </label><input type="password" placeholder="password" th:field="*{password}" th:errorclass="error" required="required"/><input type="submit" value="Login"/>
+				</form>
+			</div>
+			<div th:fragment="logout" class="logout" sec:authorize="isAuthenticated()">
+				<form action="#" th:action="@{/logout}" method="get" th:object="${user}">
+					<label>Logged as: <a href="#" th:href="@{/profile}"><strong><span th:text="${user.name}">USER</span></strong></a></label> <input type="submit" value="Logout"/>
+				</form>
+			</div>
+			<div sec:authorize="hasRole('ROLE_USER')" class="project">
+				Project: <strong><span th:text="${userData.selectedProject} ? ${userData.selectedProject.name} : 'NONE'">NONE</span></strong>
+			</div>
+		</nav>
+		<div th:fragment="alerts" class="alerts">
+			<div th:each="alert : ${alerts}" th:class="'alert ' + ${alert.type}">
+				<div class="title" th:text="${alert.title}"></div>
+				<div class="message" th:text="${alert.message}"></div>
+			</div>
+		
+			<!--
+			<div class="alert success">
+				<div class="title">Login Success</div>
+				<div class="message">This is successful message.</div>
+			</div>
+			<div class="alert failure">
+				<div class="title">Failure</div>
+				<div class="message">This is failure message.</div>
+			</div>
+			<div class="alert warning">
+				<div class="title">Warning</div>
+				<div class="message">This is warning message.</div>
+			</div>
+			<div class="alert info">
+				<div class="title">Info</div>
+				<div class="message">This is info message.</div>				
+			</div>
+			-->
+		</div>
+
+	</header>
+
+
+
+	<div class="content">
+		
+		This is content.
+	
+		<table class="twoColumns">
+			<tbody>
+				<tr>
+					<td>
+						<h1>Welcome!</h1>
+						<strong>NSI CONTEST</strong> is the generic framework for testing NSI Agents for compliance with the protocol v2.0.
+						
+					</td>
+					<td>
+						<div class="registration" sec:authorize="isAnonymous()">
+							<form action="#" th:action="@{/register}" method="post" th:object="${registrationForm}">
+								<fieldset>
+								<legend>Registration:</legend>
+								<p><label class="title">E-mail:</label> <input type="email" placeholder="user@example.com" th:field="*{email}" required="required"/></p>
+								<p><label class="title">Username:</label> <input type="text" placeholder="your username" th:field="*{username}"/></p>
+								<p><label class="title">Password:</label> <input type="password" placeholder="password" th:field="*{password}" required="required"/></p>
+								<p><label class="title">Confirm:</label> <input type="password" placeholder="confirm password" th:field="*{password2}" required="required"/></p>
+								<p><input type="radio" name="choice" value="create" th:field="*{action}" checked="checked"/><label>create a new project</label></p>
+								<p><input type="radio" name="choice" value="join" th:field="*{action}"/><label>join to existing project</label></p>
+								<p><label class="title">Project:</label> <input type="text" placeholder="new project name or existing project id" th:field="*{project}" required="required"/></p>
+								<p><input type="checkbox" name="terms" th:field="*{termsAgreed}" required="required"/><label>I agree to the terms and conditions provided in <a class="important" th:href="@{/terms}">this license</a>.</label></p>
+								<p><input type="submit" value="Register"/></p>
+								</fieldset>
+							</form>
+						</div>					
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	
+
+		
+			<table class="testcase">
+				<caption>Testcase <span th:text="${testcase.id}">#NO</span> results:</caption>
+				<thead>
+					<tr>
+						<th>Timeline</th>
+						<th>Agent 1</th>
+						<th>User NSI</th>
+						<th>Agent 2</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="time">0.1</td>
+						<td>action1</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr class="alt">
+						<td class="time">0.2</td>
+						<td>&nbsp;</td>
+						<td class="good">received</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td class="time">0.3</td>
+						<td class="warn">action1</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>	
+					<tr class="alt">
+						<td class="time">0.4</td>
+						<td class="error">action1</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>					
+				</tbody>
+			</table>
+			<br/>
+			<br/>
+			
+			<h1>Project configuration</h1>
+			
+			<form action="#" method="post">
+			<table class="props">
+				<caption>Basic settings:</caption>
+				<tbody>
+					<tr>
+						<td><label>Project name:</label></td>
+						<td><input type="text" th:field="*{name}"/></td>
+					</tr>
+					<tr>
+						<td><label>Project ID:</label></td>
+						<td><input type="text" disabled="disabled" th:field="*{uuid}" value="UUID"/></td>					
+					</tr>
+					<tr>
+						<td><label>Url:</label></td>
+						<td><input type="text" th:field="*{url}" value="URL"/></td>											
+					</tr>
+					<tr>
+						<td></td>
+						<td><input type="submit" value="Save"/></td>
+					</tr>
+				</tbody>
+			</table>
+			</form>
+			
+			<table class="users">
+				<caption>Project users:</caption>
+				<thead>
+					<tr>
+						<th>User</th>
+						<th>E-mail</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>user1</td>
+						<td>user@example.com</td>
+						<td><button type="button" class="remove">Remove</button></td>
+					</tr>
+					<tr class="alt">
+						<td>user2</td>
+						<td>test@example.com</td>
+						<td><button type="button" class="accept">Accept</button> <button type="button" class="reject">Reject</button></td>
+					</tr>
+				</tbody>
+			</table>
+			
+	</div>
+	
+	<footer th:fragment="footer">
+		Copyright &copy; 2014 <a href="http://www.geant.net">GEANT</a>
+	</footer>
+</body>
+</html>

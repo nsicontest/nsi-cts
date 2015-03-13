@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+	<div class="content">
+		<table class="props">
+			<caption>Preconditions:</caption>
+			<tbody>
+				<tr>
+					<td>Precondition 1:</td>
+					<td class="good">OK</td>
+				</tr>
+				<tr>
+					<td>Precondition 2:</td>
+					<td class="warn">Should be different</td>
+				</tr>
+				<tr>
+					<td>Precondition 3:</td>
+					<td class="good">OK</td>
+				</tr>
+			</tbody>
+		</table>
+		<br/>
+		
+		<table class="testcase">
+				<caption>Test <span>#NO</span> results:</caption>
+				<thead>
+					<tr>
+						<th>Timeline</th>
+						<th>Agent 1</th>
+						<th>User NSI</th>
+						<th>Agent 2</th>
+						<th>Agent 3</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="time">0.1</td>
+						<td>action1</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr class="alt">
+						<td class="time">0.2</td>
+						<td>&nbsp;</td>
+						<td class="good">received</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td class="time">0.3</td>
+						<td class="warn">action1</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>	
+					<tr class="alt">
+						<td class="time">0.4</td>
+						<td class="error">action1</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>					
+				</tbody>
+			</table>
+
+		<table class="props">
+			<caption>Postconditions:</caption>
+			<tbody>
+				<tr>
+					<td>Postcondition 1:</td>
+					<td class="error">Invalid state</td>
+				</tr>
+				<tr>
+					<td>Postcondition 2:</td>
+					<td class="warn">Should be different</td>
+				</tr>
+				<tr>
+					<td>Postcondition 3:</td>
+					<td class="good">OK</td>
+				</tr>
+			</tbody>
+		</table>
+		<br/>
+
+		<table class="results">
+			<caption>Overall:</caption>
+			<tbody>
+				<tr>
+					<td>Preconditions</td>
+					<td><meter max="3" value="3"></meter> 3/3</td>
+				</tr>
+				<tr>
+					<td>Postconditions</td>
+					<td><meter max="3" value="2"></meter> 2/3</td>
+				</tr>
+				<tr>
+					<td>Summary</td>
+					<td class="error">NOT PASSED</td>
+				</tr>
+			</tbody>		
+		</table>	
+	</div>
+</body>
+
+</html>

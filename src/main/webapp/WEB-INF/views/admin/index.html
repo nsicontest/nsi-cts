@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+		lang="en">
+
+<head th:include="layout :: head"/>
+
+<body>
+	<header th:include="layout-admin :: header">
+	</header>
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+			auto_refresh();
+		});
+		
+		function auto_refresh(){
+			var timestamp = new Date().getTime();
+			$('#executor').load('/executor?timestamp='+timestamp);
+		}
+		var refreshId = setInterval(auto_refresh, 10000);
+	</script>
+	
+	<div class="content">
+		<div>
+		<h1>Projects:</h1>
+		<p>Count: <span th:text="${stats.projectsCount}">PROJECTS</span></p>
+		<h1>Users:</h1>
+		<p>Count: <span th:text="${stats.usersCount}">USERS</span></p>
+		<h1>Templates:</h1>
+		<p>Count: <span th:text="${stats.templatesCount}">TEMPLATES</span></p>
+		</div>
+	
+		<div id="executor">
+		
+		</div>
+	</div>
+	
+	<footer th:include="layout :: footer">
+	</footer>
+</body>
+</html>

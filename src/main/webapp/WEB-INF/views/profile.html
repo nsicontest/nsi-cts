@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+		lang="en">
+
+<head th:replace="layout :: head"/>
+
+<body>
+	<header th:replace="layout :: header">
+	</header>
+	
+	<div class="content">
+		<h1>User <span th:value="${user.name}">USER</span> profile</h1>
+			
+		<form action="#" th:action="@{/profile}" th:object="${profileForm}" method="post">
+		<table class="props">
+			<caption>Your details:</caption>
+			<tbody>
+				<tr>
+					<td><label>User ID: <span class="error" th:if="${#fields.hasErrors('userId')}">(incorrect)</span></label></td>
+					<td>
+						<input type="text" disabled="disabled" th:field="*{userId}"/>
+						<input type="hidden" th:field="*{userId}"/>
+					</td>
+				</tr>
+				<tr>
+					<td><label>E-mail: <span class="error" th:if="${#fields.hasErrors('email')}">(incorrect)</span></label></td>
+					<td><input type="email" th:field="*{email}" required="required" th:errorclass="error" placeholder="user@example.com"/></td>					
+				</tr>
+				<tr>
+					<td><label>Username: <span class="error" th:if="${#fields.hasErrors('username')}">(incorrect)</span></label></td>
+					<td><input type="text" th:field="*{username}"/></td>											
+				</tr>
+				<tr>
+					<td><label>Password: <span class="error" th:if="${#fields.hasErrors('password')}">(must have at least 6 characters)</span></label></td>
+					<td><input type="password" th:field="*{password}" th:errorclass="error"/></td>											
+				</tr>				
+				<tr>
+					<td><label>Confirm password: <span class="error" th:if="${#fields.hasErrors('global')}">(must be the same as password)</span></label></td>
+					<td><input type="password" th:field="*{confirmPassword}" th:errorclass="error"/></td>											
+				</tr>				
+				<tr>
+					<td></td>
+					<td><input type="submit" value="Save"/></td>
+				</tr>
+			</tbody>
+		</table>
+		</form>
+	</div>
+	
+	<footer th:replace="layout :: footer">
+	</footer>
+</body>				
+</html>

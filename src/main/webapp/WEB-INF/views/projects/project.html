@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+		lang="en">
+
+<head th:replace="layout :: head"/>
+
+<body>
+	<header th:replace="layout :: header">
+		<link rel="stylesheet" href="../../../resources/styles/style.css" th:href="@{/resources/styles/style.css}"/>
+		<script src="../../../resources/scripts/jquery-2.1.1.min.js" th:src="@{/resources/scripts/jquery-2.1.1.min.js}"></script>
+		<script src="../../../resources/scripts/cts.js" th:src="@{/resources/scripts/cts.js}"></script>
+	</header>
+	
+	<div class="content">
+		<h1>Project <span th:text="${project.name}">PROJECT</span></h1>
+		
+		<div id="tabs-menu">
+			<ul>
+				<li class="active" data-tab="details">Details</li>
+				<li data-tab="topology">Topology</li>
+				<li data-tab="testcases">Test Cases</li>
+				<li data-tab="certification">Run Certificate Tests</li>
+			</ul>
+		</div>
+			
+		<div id="tabs">
+			<div class="tab active" data-content="details">
+				<table class="props">
+					<caption>Details:</caption>
+					<tbody>
+						<tr>
+							<td><label>Key: </label></td>
+							<td th:text="${project.key}">KEY</td>
+						</tr>
+						<tr>
+							<td><label>Name: </label></td>
+							<td th:text="${project.name}">NAME</td>					
+						</tr>
+						<tr>
+							<td><label>NSA ID: </label></td>
+							<td th:text="${project.networkId}">NETWORK_ID</td>											
+						</tr>			
+						<!-- 
+						<tr>
+							<td><label>URL: </label></td>
+							<td th:text="${project.url}">URL</td>											
+						</tr>			
+						<tr>
+							<td><label>Type: </label></td>
+							<td th:text="${project.type}">TYPE</td>
+						</tr>	-->
+						<tr>
+							<td></td>
+							<td><button type="button" class="accept" th:attr="data-href=@{'/projects/'+${project.key}+'/configuration'}">Configure</button></td>
+						</tr>
+					</tbody>
+				</table>			
+			</div>
+			
+			<div class="tab" data-content="topology">
+				<h2>Topology</h2>
+				<form action="#" th:action="@{'/projects/'+${project.key}+'/topology/upload'}" th:object="${uploadTopologyForm}" enctype="multipart/form-data" method="post">
+					<table class="props">
+						<tbody>
+							<tr>
+								<td colspan="2"><center><img src="../../resources/images/topology.png" th:src="@{/resources/images/topology.png}"/></center></td>
+							</tr>
+							<tr th:if="${topologyGenerated}">
+								<td><label>Download topologies: </label></td>
+								<td>
+									<button th:attr="data-href=@{'/projects/' + ${project.key} + '/topology/download?id=agentA'}">AgentA</button> 
+									<button th:attr="data-href=@{'/projects/' + ${project.key} + '/topology/download?id=agentB'}">AgentB</button>
+									<button th:attr="data-href=@{'/projects/' + ${project.key} + '/topology/download?id=agentC'}">AgentC</button>
+								</td>
+							</tr>
+							<tr th:if="${project.networkId}">
+								<td><label>Generate topologies: </label></td>
+								<td><button th:attr="data-href=@{'/projects/' + ${project.key} + '/topology/generate'}">Generate</button></td>
+							</tr>
+							<tr th:unless="${project.networkId}">
+								<td><label>Generate topologies: </label></td>
+								<td>In order to generate topologies please update project NSA ID.</td>
+							</tr>
+							<tr>
+								<td rowspan="2"><label>User topology file:</label></td>
+								<td><input th:if="${topologyGenerated}" type="file" name="file" /> <span th:if="${topologyUploaded}">User topology uploaded.</span> <span th:unless="${project.networkId} and ${topologyGenerated}">Please provide project NSA ID and generate topologies before uploading user topology.</span></td>
+							</tr>
+							<tr>
+								<td><input th:if="${topologyGenerated}" type="submit" value="Upload"/></td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+				
+		
+				<h2 th:if="${topologyGenerated}">Agents connections:</h2>		
+				<table class="props connections" th:each="entry : ${agents}">
+					<caption><span th:text="${entry.key} + ' (' + ${entry.value.nsaId} + ')'">AGENT</span></caption>
+					<tbody th:each="port : ${entry.value.bidirectionalPorts}">
+							<tr>
+								<td><label>STP Id:</label></td>
+								<td colspan="3" th:text="${port.stpId}">STP_ID</td>
+							</tr>
+							
+							<tr>
+								<td rowspan="6">&nbsp;</td>
+								<td rowspan="3"><label>InBound</label></td>
+								<td><label>Id:</label></td>
+								<td th:text="${port.inbound.id}">ID</td>
+							</tr>
+							<tr>
+								<td><label>Alias:</label></td>
+								<td th:text="${port.inbound.alias}">ALIAS</td>
+							</tr>
+							<tr>
+								<td><label>Vlans:</label></td>
+								<td th:text="${port.inbound.vlans}">VLANS</td>
+							</tr>
+
+							<tr>
+								<td rowspan="3"><label>OutBound</label></td>
+								<td><label>Id:</label></td>
+								<td th:text="${port.outbound.id}">ID</td>
+							</tr>
+							<tr>
+								<td><label>Alias:</label></td>
+								<td th:text="${port.outbound.alias}">ALIAS</td>
+							</tr>
+							<tr>
+								<td><label>Vlans:</label></td>
+								<td th:text="${port.outbound.vlans}">VLANS</td>
+							</tr>
+							<tr>
+								<td colspan="4">&nbsp;</td>
+							</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<div class="tab" data-content="testcases">
+				<h2>New Test Case</h2>
+				
+				<form action="#" th:action="@{'/projects/'+${project.key}+'/testcases/new'}" th:object="${newTestCaseForm}" method="post">
+				<table class="props">
+					<tbody>
+						<tr>
+							<td>Filter by Type:	</td>
+							<td>
+								<select id="filter" >
+									<option value="ALL" selected="selected">ALL</option>
+									<option value="REQUESTER">Requester</option>
+									<option value="PROVIDER">Provider</option>
+									<option value="AGGREGATOR">Aggregator</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><label>Select scenario(s): </label></td>
+							<td>
+								<select id="templates" size="10" th:field="*{templateIds}" th:errorclass="error" multiple="multiple">
+									<option th:each="template : ${templates}" th:value="${template.templateId}" th:text="${template.type+': '+template.name}" th:attr="data-type=${template.type}">TEMPLATE</option>
+								</select>					
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><input type="submit" value="Launch test case"/></td>
+						</tr>
+					</tbody>
+				</table>
+				</form>
+				<br/>
+				
+				<h2>Project Test Cases:</h2>
+				<table class="testcases">
+					<caption>Test Cases:</caption>
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>Info</th>
+							<th>Status</th>
+							<th>Results</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="testcase, iterStat : ${testcases}" th:class="${iterStat.odd}? 'alt'" th:attr="data-href=@{'/projects/'+${project.key}+'/testcases/'+${testcase.testCaseId}}">
+							<td th:text="${testcase.createdAt}">TIME</td>
+							<td th:if="${testcase.certification}" th:text="'Certification for '+${testcase.certification}">CERTIFICATION</td>
+							<td th:unless="${testcase.certification}" th:text="'Tests run: '+${testcase.testsCount}">TESTS_COUNT</td>
+							<td th:text="${testcase.status}">STATUS</td>
+							<td th:if="${testcase.certification}" th:class="
+								(${testcase.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).PASSED} ? 'good' : 
+									(${testcase.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).PASSED_CONDITIONALLY} ? 'warn' :
+										(${testcase.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).FAILED} ? 'error'
+										)
+									)					
+								)" 
+								th:text="
+								(${testcase.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).PASSED} ? 'COMPLIANT' : 
+									(${testcase.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).PASSED_CONDITIONALLY} ? 'COMPLIANT with warnings' :
+										(${testcase.resultStatus} == ${T(net.geant.nsi.contest.platform.data.ResultStatus).FAILED} ? 'NOT COMPLIANT' : 'N/A'
+										)
+									)					
+								)">N/A</td>
+							<td th:unless="${testcase.certification}" th:text="${testcase.resultStatus}">RESULTS</td>
+						</tr>
+					</tbody>
+				</table>			
+			</div>
+			
+			<div class="tab" data-content="certification">
+				<h2>Run Certification Test Case</h2>
+				<table class="props">
+					<tbody>
+						<tr>
+							<td>Certification for:	</td>
+							<td>
+								<form action="#" th:action="@{'/projects/'+${project.key}+'/testcases/certification/new'}" th:object="${newCertificationForm}" method="post">
+								<select id="filterCertification" th:field="*{type}" th:errorclass="error">
+									<option th:each="agentType : ${T(net.geant.nsi.contest.platform.data.AgentType).values()}" th:value="${agentType}" th:text="${agentType}">TYPE</option>
+								</select>
+								<br/>
+								<input type="submit" value="Launch Certification"/>
+								</form>
+							</td>
+						</tr>
+						<tr>
+							<td><label>Certification scenarios: </label></td>
+							<td>
+								<select id="certificationTemplates" size="10" multiple="multiple" disabled="disabled">
+									<option th:each="template : ${templates}" th:if="${template.certification}" th:value="${template.templateId}" th:text="${template.type+': '+template.name}" th:attr="data-type=${template.type}">TEMPLATE</option>
+								</select>					
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+				
+			</div>
+		</div>	
+			
+		
+		<br/>
+		
+	</div>
+	
+	<footer th:replace="layout :: footer">
+	</footer>
+</body>				
+</html>

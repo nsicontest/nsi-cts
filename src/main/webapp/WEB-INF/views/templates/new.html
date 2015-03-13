@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+		lang="en">
+
+<head th:replace="layout :: head"/>
+
+<body>
+	<header th:replace="layout :: header">
+	</header>
+	
+	<div class="content">
+		<h1>Template:</h1>
+			
+		<form action="#" th:action="@{/templates/new}" th:object="${newTemplateForm}" method="post">
+		<table class="props">
+			<caption>Create a new TestCase Template:</caption>
+			<tbody>
+				<tr>
+					<td><label>Name: <span class="error" th:if="${#fields.hasErrors('name')}">(invalid name)</span></label></td>
+					<td><input type="text" th:field="*{name}" value="NAME" required="required" th:errorclass="error"/></td>					
+				</tr>
+				<tr>
+					<td><label>Type: <span class="error" th:if="${#fields.hasErrors('type')}"> (invalid type)</span></label></td>
+					<td>
+						<select th:field="*{type}" th:errorclass="error">
+							<option th:each="agentType : ${T(net.geant.nsi.contest.platform.data.AgentType).values()}" th:value="${agentType}" th:text="${agentType}">TYPE</option>
+						</select>					
+					</td>
+				</tr>
+				<tr>
+					<td><label>For Certification: </label></td>
+					<td><input type="checkbox" th:field="*{certification}" /></td>
+				</tr>
+				<tr>
+					<td><label>Template: <span class="error" th:if="${#fields.hasErrors('template')}">(invalid format)</span></label></td>
+					<td><textarea class="template" rows="25" th:field="*{template}" th:errorclass="error">TEMPLATE</textarea></td>											
+				</tr>			
+				<tr>
+					<td></td>
+					<td><input type="submit" value="Create"/></td>
+				</tr>
+			</tbody>
+		</table>
+		</form>
+	</div>
+	
+	<footer th:replace="layout :: footer">
+	</footer>
+</body>				
+</html>

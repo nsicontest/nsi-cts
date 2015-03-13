@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+		lang="en">
+
+<head th:replace="layout :: head"/>
+
+<body>
+	<header th:replace="layout :: header">
+	</header>
+	
+	<div class="content">
+		<table class="templates">
+			<caption>Templates:</caption>
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Type</th>
+					<th>Name</th>
+					<th>For Certification</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="template, iterStat : ${templates}" th:class="${iterStat.odd}? 'alt'" th:attr="data-href=@{'/templates/'+${template.templateId}}">
+					<td th:text="${template.templateId}">ID</td>
+					<td th:text="${template.type}">TYPE</td>
+					<td th:text="${template.name}">NAME</td>
+					<td><span th:if="${template.certification}">&#10004;</span></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<footer th:replace="layout :: footer">
+	</footer>
+</body>
+</html>

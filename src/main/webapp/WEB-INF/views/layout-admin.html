@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+		lang="en">
+<head th:fragment="head">
+	<meta charset="UTF-8"/>
+	<meta name="author" content="Michal Giertych (mikus@man.poznan.pl)"/>
+	<link rel="stylesheet" href="../../resources/styles/style.css" th:href="@{/resources/styles/style.css}"/>
+	<script src="../../resources/scripts/jquery-2.1.1.min.js" th:src="@{/resources/scripts/jquery-2.1.1.min.js}"></script>
+	<title>GEANT CTS Platform</title>
+</head>
+<body>
+	<header th:fragment="header">
+		<nav>
+			<div th:replace="layout :: logo">LOGO</div>
+			
+			<ul sec:authorize="hasRole('ROLE_ADMIN')">
+				<li sec:authorize="hasRole('ROLE_USER')"><a href="#" th:href="@{/home}">Home</a></li>
+				<li sec:authorize="hasRole('ROLE_ADMIN')"><a href="#" th:href="@{/admin}">Overview</a></li>
+				<li ><a href="#" th:href="@{/admin/projects}">Projects</a></li>
+				<li><a href="#" th:href="@{/admin/users}">Users</a></li>
+				<li><a href="#" th:href="@{/templates}">Templates</a>
+					<ul>
+						<li><a href="#" th:href="@{/templates/new}">Create a new template</a></li>
+					</ul>
+				</li>
+				<li><a href="#" th:href="@{/docs}">Docs</a></li>
+			</ul>
+			
+			<div th:replace="layout :: logout">LOGOUT</div>
+		</nav>
+		<div th:replace="layout :: alerts">ALERTS</div>
+	</header>
+</body>
+</html>

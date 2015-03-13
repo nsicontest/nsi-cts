@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+		lang="en">
+
+<body>
+	
+	<div th:fragment="stats">
+		<h1>Task Manager:</h1>
+		
+		<table class="tasks">
+				<caption>Scheduled <span th:text="${scheduledTasks.size()}">#NO</span> tasks</caption>
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="task, iterStat : ${scheduledTasks}" th:class="${iterStat.odd}? 'alt'">
+						<td th:text="${task.id}">ID</td>
+						<td th:text="${task.description}">DESCRIPTION</td>
+					</tr>
+				</tbody>
+		</table>
+		
+		<table class="tasks">
+				<caption>Running <span th:text="${runningTasks.size()}">#NO</span> task(s)</caption>
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Identifier</th>
+						<th>Started At</th>
+						<th>Description</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="task, iterStat : ${runningTasks}" th:class="${iterStat.odd}? 'alt'">
+						<td th:text="${task.id}">ID</td>
+						<td th:text="${task.identifier}">IDENTIFIER</td>
+						<td th:text="${task.startedAt}">STARTED_AT</td>
+						<td th:text="${task.description}">DESCRIPTION</td>
+						<td><button type="button" class="cancel" th:attr="data-href=@{'/executor/'+${task.id}}">Cancel</button></td>
+					</tr>
+				</tbody>
+		</table>
+
+		
+		<table class="tasks">
+				<caption>Queued <span th:text="${queuedTasks.size()}">#NO</span> task(s)</caption>
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Identifier</th>
+						<th>Created At</th>
+						<th>Description</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="task, iterStat : ${queuedTasks}" th:class="${iterStat.odd}? 'alt'">
+						<td th:text="${task.id}">ID</td>
+						<td th:text="${task.identifier}">IDENTIFIER</td>
+						<td th:text="${task.createdAt}">CREATED_AT</td>
+						<td th:text="${task.description}">DESCRIPTION</td>
+						<td><button type="button" class="cancel" th:attr="data-href=@{'/executor/'+${task.id}}">Cancel</button></td>
+					</tr>
+				</tbody>
+		</table>	
+	</div>
+	
+	<div th:fragment="queuedTasksGroup">
+		QUEUED GROUP TASKS
+	</div>	
+	
+</body>				
+</html>

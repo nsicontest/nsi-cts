@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+		lang="en">
+
+<head th:replace="layout :: head"/>
+
+<body>
+	<header th:replace="layout :: header">
+	</header>
+	
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var url = [[@{'/projects/'+${project.key}+'/testcases/'+${testCase.testCaseId}+'/results'}]] ;
+		
+		$(document).ready(function() {
+			auto_refresh();
+		});
+		
+		function auto_refresh(){
+			var timestamp = new Date().getTime();
+			$('#results').load(url + '?timestamp='+timestamp);
+			$("#results").find("script").each(function(i) {
+                eval($(this).text());
+            });
+		}
+		
+		var refreshId = setInterval(auto_refresh, 3000);
+		/*]]>*/
+	</script>
+	
+	<div class="content">
+		<h1>Project <span th:text="${project.name}">PROJECT</span></h1>
+		<h2>Test Case: <span th:text="${testCase.testCaseId}">TESTCASE</span></h2>
+		<h3>Created at: <span th:text="${testCase.createdAt}">TIMESTAMP</span></h3>
+		
+		<div id="results">
+			<center>No test case results available.</center>
+		</div>
+	</div>
+	
+	<footer th:replace="layout :: footer">
+	</footer>
+</body>				
+</html>

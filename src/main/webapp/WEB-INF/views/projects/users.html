@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+		lang="en">
+
+<head th:replace="layout :: head"/>
+
+<body>
+	<header th:replace="layout :: header">
+	</header>
+	
+	<div class="content">
+		<h1>Project: <span th:text="${project.name}">PROJECT</span></h1>
+		<table class="users">
+			<caption>Users:</caption>
+			<thead>
+				<tr>
+					<th>E-mail</th>
+					<th>Username</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="user, iterStat : ${users}" th:class="${iterStat.odd}? 'alt'">
+					<td th:text="${user.email}">EMAIL</td>
+					<td th:text="${user.username}">USERNAME</td>
+					<td>
+						<button th:if="(${acls.containsKey(user.userId)} and ${acls.get(user.userId).status} == ${T(net.geant.nsi.contest.platform.data.UserAcl.Status).AWAITING})" type="button" class="accept" th:attr="data-href=@{'/projects/'+${project.key}+'/users/'+${user.userId}+'?action=accept'}">Accept</button>
+						<button type="button" class="remove" th:attr="data-href=@{'/projects/'+${project.key}+'/users/'+${user.userId}+'?action=delete'}">Remove</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<footer th:replace="layout :: footer">
+	</footer>
+</body>
+</html>

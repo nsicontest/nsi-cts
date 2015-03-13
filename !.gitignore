@@ -1,0 +1,7 @@
+\bin
+\build
+\.metadata
+\.settings
+*.log
+*.jar
+*.zip
